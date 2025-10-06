@@ -1,13 +1,21 @@
 version: 0.2
-phases:
+env:
+  variables:
+    ECR_REPO_NAME: sample-task3-myangularapp546
   pre_build:
     commands:
-      #dockerlogin
-      - echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USER} --password-stdin
+      # Docker Hub login
+      - echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USER} --password-stdin 
+      
+      # ECR login
+      - ECR_MAIN_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${ECR_MAIN_URI}
+
+      - ECR_IMAGE_URI="${ECR_MAIN_URI}/${ECR_REPO_NAME}:latest"
   build:
     commands:
       - docker build -t sample-task3-myangularapp546:latest .
   post_build:
     commands:
-      - docker tag sample-task3-myangularapp546:latest ${DOCKERHUB_USER}/sample-task3-myangularapp546:latest
-      - docker push ${DOCKERHUB_USER}/sample-task3-myangularapp546:latest
+      - docker tag sample-task3-myangularapp546:latest ${ECR_IMAGE_URI}
+      - docker push ${ECR_IMAGE_URI}
