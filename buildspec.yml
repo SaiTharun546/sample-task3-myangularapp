@@ -5,14 +5,13 @@ phases:
       nodejs: 20
     commands:
       - npm install -g @angular/cli@17
-  pre-build:
+  pre_build:
     commands:
       - npm install
   build:
     commands:
       - ng build -c production
-  artifacts:
-    base-directory: dist/my-angular-project
-    files:
-      - '**/*'
-
+artifacts:
+  base-directory: dist/my-angular-project
+  files:
+    - '**/*'
