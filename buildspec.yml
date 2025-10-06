@@ -1,17 +1,13 @@
 version: 0.2
 phases:
-  install:
-    runtime-versions:
-      nodejs: 20
-    commands:
-      - npm install -g @angular/cli@17
   pre_build:
     commands:
-      - npm install
+      #dockerlogin
+      - echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USER} --password-stdin
   build:
     commands:
-      - ng build -c production
-artifacts:
-  base-directory: dist/my-angular-project
-  files:
-    - '**/*'
+      - docker build -t sample-task3-myangularapp546:latest .
+  post_build:
+    commands:
+      - docker tag sample-task3-myangularapp546:latest ${DOCKERHUB_USER}/sample-task3-myangularapp546:latest
+      - docker push ${DOCKERHUB_USER}/sample-task3-myangularapp546:latest
