@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    ECR_REPO_NAME: my-angular-app
+    ECR_REPO_NAME: sample-task3-myangularapp546
   phases:
     pre_build:
       commands:
@@ -15,8 +15,8 @@ env:
         - ECR_IMAGE_URI="${ECR_MAIN_URI}/${ECR_REPO_NAME}:latest"
     build:
       commands:
-        - docker build -t my-angular-app:latest .
+        - docker build -t sample-task3-myangularapp546:latest .
     post_build:
       commands:
-        - docker tag my-angular-app:latest ${ECR_IMAGE_URI}
+        - docker tag sample-task3-myangularapp546:latest ${ECR_IMAGE_URI}
         - docker push ${ECR_IMAGE_URI}
